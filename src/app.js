@@ -7,21 +7,29 @@ import UIManager from './ui/uiManager.js';
 import * as utils from './functions/util.js';
 
 globalThis.UIManager =
-globalThis.UI =
-UIManager;
+    globalThis.UI =
+        UIManager;
 
 globalThis.$_ = utils;
 
 globalThis.goto = async tag => {
     let url;
-    switch(tag) {
-        case 'github': url = 'https://github.com/VickScarlet/lifeRestart'; break;
-        case 'discord': url = 'https://discord.gg/U3qrf49NMQ'; break;
-        case 'sponsor_afd': url = 'https://afdian.net/@LifeRestart'; break;
-        case 'sponsor_ddf': url = 'https://dun.mianbaoduo.com/@vickscarlet'; break;
+    switch (tag) {
+        case 'github':
+            url = 'https://github.com/VickScarlet/lifeRestart';
+            break;
+        case 'discord':
+            url = 'https://discord.gg/U3qrf49NMQ';
+            break;
+        case 'sponsor_afd':
+            url = 'https://afdian.net/@LifeRestart';
+            break;
+        case 'sponsor_ddf':
+            url = 'https://dun.mianbaoduo.com/@vickscarlet';
+            break;
     }
     try {
-        if(Laya.Browser.onIOS) {
+        if (Laya.Browser.onIOS) {
             window.location.href = url;
         } else {
             window.open(url, '_blank');
@@ -30,8 +38,9 @@ globalThis.goto = async tag => {
         console.error(error);
     }
 }
-class App{
-    constructor(){
+
+class App {
+    constructor() {
         this.name = 'lifeRestart';
         this.version = '2.0.0';
         console.log(`${this.name} ${this.version}`);
@@ -45,15 +54,16 @@ class App{
 
     #initLaya() {
         /**
-        *...特殊的字符，如泰文，必须重新实现这个类
-        */
-        //class laya.webgl.text.CharSegment
+         *...特殊的字符，如泰文，必须重新实现这个类
+         */
+            //class laya.webgl.text.CharSegment
         class CharSegment {
             constructor() {
-                this._sourceStr=null;
+                this._sourceStr = null;
             }
+
             textToSpit(str) {
-                this._sourceStr=str;
+                this._sourceStr = str;
                 var texLen = str.length;
                 var idx = -1;
                 this._words = [];
@@ -67,18 +77,22 @@ class App{
                     }
                 }
             }
-            getChar(i){
+
+            getChar(i) {
                 return this._words;
             }
-            getCharCode(i){
+
+            getCharCode(i) {
                 return this._words[i].codePointAt(0);
             }
-            length(){
+
+            length() {
                 return this._words.length;
             }
         }
-        Laya.class(CharSegment,'laya.webgl.text.CharSegment');
-        Laya.imps(CharSegment.prototype,{"laya.webgl.text.ICharSegment":true})
+
+        Laya.class(CharSegment, 'laya.webgl.text.CharSegment');
+        Laya.imps(CharSegment.prototype, {"laya.webgl.text.ICharSegment": true})
 
 
         // Laya.init(1125, 2436, Laya.WebGL);
@@ -103,15 +117,15 @@ class App{
         const screenWidth = window.innerWidth;
         const screenHeight = window.innerHeight;
         const screenRatio = screenWidth / screenHeight;
-        if(screenRatio > designRatio) {
+        if (screenRatio > designRatio) {
             return [
-                Math.min(screenWidth*designHeight/screenHeight, maxWidth),
+                Math.min(screenWidth * designHeight / screenHeight, maxWidth),
                 designHeight
             ]
         } else {
             return [
                 designWidth,
-                Math.min(screenHeight*designWidth/screenWidth, maxHeight)
+                Math.min(screenHeight * designWidth / screenWidth, maxHeight)
             ]
         }
     }
@@ -121,18 +135,17 @@ class App{
     }
 
     async #setLanguage(language) {
-        switch(language) {
+        switch (language) {
             case App.languages['en-us']:
             case App.languages['zh-cn']:
                 this.#language = language;
+                Laya.Text.langPacks = import('/src/i18n/zh-cn.js').default;
                 break;
             default:
                 this.#language = App.languages['zh-cn'];
+                Laya.Text.langPacks = import('/src/i18n/zh-cn.js').default;
                 break;
         }
-        globalThis.$lang =
-        Laya.Text.langPacks =
-            (await import(`./i18n/${this.#language}.js`)).default;
     }
 
     resigterEvent() {
@@ -140,8 +153,8 @@ class App{
             $ui.popup(UI.popups.ACHIEVEMENT, {achievement});
         })
         $$on('message', ([message, ...args]) => {
-            if(Array.isArray(message)) {
-                message = message.map(([m, ...a]) => $_.format($lang[m], ...a)) .join('\n');
+            if (Array.isArray(message)) {
+                message = message.map(([m, ...a]) => $_.format($lang[m], ...a)).join('\n');
             } else {
                 message = $_.format(
                     $lang[message], ...args
@@ -152,14 +165,14 @@ class App{
     }
 
     async start({
-        language = App.languages['zh-cn'],
-        theme = 'default',
-    }) {
+                    language = App.languages['zh-cn'],
+                    theme = 'default',
+                }) {
         this.resigterEvent();
         this.#initLaya();
         globalThis.$ui = UIManager.getInstance();
 
-        if(theme=='default') {
+        if (theme == 'default') {
             theme = localStorage.getItem('theme') || 'default';
         }
 
@@ -168,8 +181,8 @@ class App{
         await $ui.setLoading(UI.pages.LOADING);
         await $ui.switchView(UI.pages.LOADING);
         await core.initial(
-            dataSet=>Laya.promises.loader.load(`data/${this.#language}/${dataSet}.json`, null, Laya.Loader.JSON),
-            dataSet=>Laya.promises.loader.load(`data/${dataSet}.json`, null, Laya.Loader.JSON),
+            dataSet => Laya.promises.loader.load(`data/${this.#language}/${dataSet}.json`, null, Laya.Loader.JSON),
+            dataSet => Laya.promises.loader.load(`data/${dataSet}.json`, null, Laya.Loader.JSON),
         );
         await $ui.switchView(UI.pages.MAIN);
 

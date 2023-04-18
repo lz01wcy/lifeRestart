@@ -42,27 +42,27 @@ class Achievement {
 
     get(achievementId) {
         const achievement = this.#achievements[achievementId];
-        if(!achievement) throw new Error(`[ERROR] No Achievement[${achievementId}]`);
+        if (!achievement) throw new Error(`[ERROR] No Achievement[${achievementId}]`);
         return this.#system.clone(achievement);
     }
 
     check(achievementId) {
-        const { condition } = this.get(achievementId);
+        const {condition} = this.get(achievementId);
         return this.#system.check(condition);
     }
 
     isAchieved(achievementId) {
-        for(const [achieved] of (this.#prop.get(this.#prop.TYPES.ACHV)||[]))
-            if(achieved == achievementId) return true;
+        for (const [achieved] of (this.#prop.get(this.#prop.TYPES.ACHV) || []))
+            if (achieved == achievementId) return true;
         return false;
     }
 
     achieve(opportunity) {
         this.list()
-            .filter(({isAchieved})=>!isAchieved)
-            .filter(({opportunity: o})=>o==opportunity)
-            .filter(({id})=>this.check(id, this.#prop))
-            .forEach(({id})=>{
+            .filter(({isAchieved}) => !isAchieved)
+            .filter(({opportunity: o}) => o == opportunity)
+            .filter(({id}) => this.check(id, this.#prop))
+            .forEach(({id}) => {
                 this.#prop.achieve(this.#prop.TYPES.ACHV, id)
                 $$event('achievement', this.get(id))
             });

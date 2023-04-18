@@ -1,9 +1,10 @@
 import Views from './themes/views.js';
+
 export default class UIManager {
     constructor(stage) {
         UIManager.#views = Views;
 
-        if(!stage) {
+        if (!stage) {
             stage = Laya.stage;
         }
         this.#stage = stage;
@@ -15,24 +16,24 @@ export default class UIManager {
         stage.addChild(this.#popupLayer);
         this.#popupLayer.zOrder = 3;
         this.#viewLayer.top =
-        this.#viewLayer.bottom =
-        this.#viewLayer.left =
-        this.#viewLayer.right =
-        this.#dialogLayer.top =
-        this.#dialogLayer.bottom =
-        this.#dialogLayer.left =
-        this.#dialogLayer.right =
-        this.#popupLayer.top =
-        this.#popupLayer.bottom =
-        this.#popupLayer.left =
-        this.#popupLayer.right =
-        this.#dialogMask.top =
-        this.#dialogMask.bottom =
-        this.#dialogMask.left =
-        this.#dialogMask.right = 0;
+            this.#viewLayer.bottom =
+                this.#viewLayer.left =
+                    this.#viewLayer.right =
+                        this.#dialogLayer.top =
+                            this.#dialogLayer.bottom =
+                                this.#dialogLayer.left =
+                                    this.#dialogLayer.right =
+                                        this.#popupLayer.top =
+                                            this.#popupLayer.bottom =
+                                                this.#popupLayer.left =
+                                                    this.#popupLayer.right =
+                                                        this.#dialogMask.top =
+                                                            this.#dialogMask.bottom =
+                                                                this.#dialogMask.left =
+                                                                    this.#dialogMask.right = 0;
         this.#dialogMask.graphics.drawRect(0, 0, 5000, 5000, '#000000');
         this.#dialogMask.alpha = 0.4;
-        this.#dialogMask.on(Laya.Event.CLICK, this, ()=>{
+        this.#dialogMask.on(Laya.Event.CLICK, this, () => {
             this.#dialogStack[this.#dialogStack.length - 1]?.close?.();
         })
     }
@@ -53,7 +54,8 @@ export default class UIManager {
     static get inst() {
         return this.getInstance();
     }
-    static getInstance(name="default") {
+
+    static getInstance(name = "default") {
         return this.#instance[name] || (this.#instance[name] = new UIManager());
     }
 
@@ -105,20 +107,20 @@ export default class UIManager {
         let view = await this.#viewMap.get(className);
 
         let timeout;
-        if(this.#loading) {
+        if (this.#loading) {
             timeout = setTimeout(
-                ()=>this.#stage.addChild(this.#loading),
+                () => this.#stage.addChild(this.#loading),
                 3000
             );
         }
         const onProgress = this.#loading?.onProgress;
 
-        if(!view) {
+        if (!view) {
             // load view
             const ViewClass = await this.loadView(className);
             const resourceList = await ViewClass.load?.(args);
-            const scanedResourceList = this.#loading? this.scanResource(ViewClass.uiView): [];
-            if(preload) {
+            const scanedResourceList = this.#loading ? this.scanResource(ViewClass.uiView) : [];
+            if (preload) {
                 preload = [].concat(preload).concat(scanedResourceList);
             } else {
                 preload = scanedResourceList;
@@ -134,7 +136,7 @@ export default class UIManager {
             const resourceList = await view.constructor.load?.(args);
             await this.loadRes(resourceList, preload, onProgress);
         }
-        if(timeout) clearTimeout(timeout);
+        if (timeout) clearTimeout(timeout);
         this.#loading?.removeSelf();
 
         this.#config(view, viewName, type);
@@ -144,40 +146,40 @@ export default class UIManager {
 
     async loadView(className) {
         // load view
-        if(this.#class.has(className)) return this.#class.get(className);
-        const c = (await import(`./themes/${className}.js`)).default;
+        if (this.#class.has(className)) return this.#class.get(className);
+        const c = (await import(`/src/ui/themes/${className}.js`)).default;
         this.#class.set(className, c);
         return c;
     }
 
     async loadRes(resourceList, preload, onProgress) {
         const cnt = (resourceList?.length || 0)
-            +(preload?.length || 0);
-        if(resourceList && resourceList.length) {
+            + (preload?.length || 0);
+        if (resourceList && resourceList.length) {
             const s = resourceList.length / cnt;
-            await Laya.promises.loader.load(resourceList, Laya.Handler.create(null, prg=>onProgress?.(prg*s)));
+            await Laya.promises.loader.load(resourceList, Laya.Handler.create(null, prg => onProgress?.(prg * s)));
         }
-        if(preload && preload.length) {
+        if (preload && preload.length) {
             const s = 1 - preload.length / cnt;
             const l = preload.length / cnt;
-            await Laya.promises.loader.load(preload, Laya.Handler.create(null, prg=>onProgress?.(prg*l+s)));
+            await Laya.promises.loader.load(preload, Laya.Handler.create(null, prg => onProgress?.(prg * l + s)));
         }
     }
 
     #showDialogStack() {
-        if(this.#dialogStack.length == 0) {
+        if (this.#dialogStack.length == 0) {
             this.#dialogLayer.visible = false;
             return;
         }
         this.#dialogLayer.visible = true;
-        this.#dialogStack.forEach((dialog, i)=>{
+        this.#dialogStack.forEach((dialog, i) => {
             this.#dialogLayer.addChild(dialog);
             dialog.zOrder = i;
         })
         this.#dialogLayer.addChild(this.#dialogMask);
         const l = this.#dialogStack.length;
-        this.#dialogMask.zOrder = l -1;
-        this.#dialogStack[l -1].zOrder = l;
+        this.#dialogMask.zOrder = l - 1;
+        this.#dialogStack[l - 1].zOrder = l;
     }
 
     async showDialog(dialogName, args, actions) {
@@ -185,7 +187,7 @@ export default class UIManager {
         const dialog = await this.getView(className, args, actions?.load, dialogName, 'pages');
 
         const index = this.#dialogStack.indexOf(dialog);
-        if(index != -1) {
+        if (index != -1) {
             this.#dialogStack.splice(index, 1);
         }
         this.#dialogStack.push(dialog);
@@ -196,19 +198,19 @@ export default class UIManager {
         const open = actions?.open || (async () => {
             dialog.scaleX = 0;
             dialog.scaleY = 0;
-            await Laya.promises.Tween.to(dialog, { scaleX: 1, scaleY: 1 }, 300, Laya.Ease.backOut);
+            await Laya.promises.Tween.to(dialog, {scaleX: 1, scaleY: 1}, 300, Laya.Ease.backOut);
         });
         await open(dialog);
         dialog.mouseThrough = true;
         dialog.mouseEnabled = true;
-        dialog.close = async ()=>{
-            if(actions?.close) {
+        dialog.close = async () => {
+            if (actions?.close) {
                 await actions.close();
             } else {
-                await Laya.promises.Tween.to(dialog, { scaleX: 0, scaleY: 0 }, 300, Laya.Ease.strongIn);
+                await Laya.promises.Tween.to(dialog, {scaleX: 0, scaleY: 0}, 300, Laya.Ease.strongIn);
             }
             const index = this.#dialogStack.indexOf(dialog);
-            if(index != -1) {
+            if (index != -1) {
                 this.#dialogStack.splice(index, 1);
             }
             this.#showDialogStack();
@@ -232,47 +234,47 @@ export default class UIManager {
 
     #config(view, key, type) {
         const config = this.#configs?.[type]?.[key];
-        if(!config) return;
-        if(view.config && view.config(config)) return;
+        if (!config) return;
+        if (view.config && view.config(config)) return;
         const applyConfig = (target, config) => {
-            if(!target) return;
-            if(typeof config == 'string') {
+            if (!target) return;
+            if (typeof config == 'string') {
                 config = this.#configs?.class?.[config];
             }
             $_.deepMapSet(target, config);
         };
 
-        if(config.names)
-            for(const name in config.names)
+        if (config.names)
+            for (const name in config.names)
                 this.#deepGetChildsByName(view, name)
                     .forEach(child => applyConfig(child, config.names[name]));
 
-        if(config.vars)
-            for(const key in config.vars)
+        if (config.vars)
+            for (const key in config.vars)
                 applyConfig(view[key], config.vars[key]);
 
     }
 
     #deepGetChildsByName(parent, name) {
         const list = [];
-        if(!parent || !parent._childs) return list;
+        if (!parent || !parent._childs) return list;
 
-        for(const child of parent._childs) {
-            if(child.name == name) list.push(child);
-            if(child._childs) list.push(...this.#deepGetChildsByName(child, name));
+        for (const child of parent._childs) {
+            if (child.name == name) list.push(child);
+            if (child._childs) list.push(...this.#deepGetChildsByName(child, name));
         }
         return list;
     }
 
     #cutPath(path) {
-        path = ''+path;
+        path = '' + path;
         let index = path.length;
         do {
-            index --;
-            if(path[index] == '.') {
+            index--;
+            if (path[index] == '.') {
                 break;
             }
-        } while (index>0)
+        } while (index > 0)
         return [
             path.substring(0, index),
             path.substring(index, path.length)
@@ -280,25 +282,25 @@ export default class UIManager {
     }
 
     #subSkin(skin, type) {
-        if(!skin || !skin.replace(/\s/g, '')) return [];
+        if (!skin || !skin.replace(/\s/g, '')) return [];
         switch (type) {
             case 'ProgressBar':
-                return [ skin, ...this.#progressBarSkin(skin) ];
+                return [skin, ...this.#progressBarSkin(skin)];
             case 'ScrollBar':
-                return [ skin, ...this.#scrollBarSkin(skin) ];
+                return [skin, ...this.#scrollBarSkin(skin)];
             default:
                 return [skin]
         }
     }
 
     #progressBarSkin(skin) {
-        if(!skin.replace(/\s/g, '')) return [];
+        if (!skin.replace(/\s/g, '')) return [];
         let p = this.#cutPath(skin);
         return [`${p[0]}$bar${p[1]}`];
     }
 
     #scrollBarSkin(skin) {
-        if(!skin.replace(/\s/g, '')) return [];
+        if (!skin.replace(/\s/g, '')) return [];
         let p = this.#cutPath(skin);
         return [
             `${p[0]}$bar${p[1]}`,
@@ -308,7 +310,7 @@ export default class UIManager {
     }
 
     scanResource(uiView) {
-        if(!uiView) return [];
+        if (!uiView) return [];
         const resourceList = [];
 
         resourceList.push(...this.#subSkin(uiView.props?.skin, uiView.type));
@@ -327,12 +329,13 @@ export default class UIManager {
     }
 
     get currentDialog() {
-        return this.#dialogStack[this.#dialogStack.length -1];
+        return this.#dialogStack[this.#dialogStack.length - 1];
     }
 
     get theme() {
         return localStorage.getItem('theme');
     }
+
     set theme(value) {
         localStorage.setItem('theme', value);
         this.#stage.bgColor = this.#configs.bgColor;
@@ -342,18 +345,23 @@ export default class UIManager {
     get #pages() {
         return UIManager.theme(this.theme, 'pages');
     }
+
     get #popups() {
         return UIManager.theme(this.theme, 'popups');
     }
+
     get #configs() {
         return UIManager.theme(this.theme, 'configs');
     }
+
     get common() {
         return this.#configs.common;
     }
+
     gradeColor(grade) {
         return this.common.grade[grade];
     }
+
     gradeFilter(grade) {
         return this.common.filter[grade];
     }
