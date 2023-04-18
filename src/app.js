@@ -13,6 +13,7 @@ globalThis.UIManager =
         UIManager;
 
 globalThis.$_ = utils;
+globalThis.$lang = undefined;
 
 globalThis.goto = async tag => {
     let url;
@@ -151,6 +152,7 @@ class App {
                 Laya.Text.langPacks = ZhCn.default;
                 break;
         }
+        $lang = Laya.Text.langPacks;
     }
 
     resigterEvent() {
@@ -177,7 +179,7 @@ class App {
         this.#initLaya();
         globalThis.$ui = UIManager.getInstance();
 
-        if (theme == 'default') {
+        if (theme === 'default') {
             theme = localStorage.getItem('theme') || 'default';
         }
 
