@@ -33,6 +33,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:8.2.2"],\
             ["core-js", "npm:3.17.2"],\
             ["html-webpack-plugin", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:5.5.0"],\
+            ["regenerator-runtime", "npm:0.13.11"],\
             ["v-transform", "npm:2.0.1"],\
             ["webpack", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:5.79.0"],\
             ["webpack-cli", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:4.8.0"],\
@@ -5422,6 +5423,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["babel-loader", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:8.2.2"],\
             ["core-js", "npm:3.17.2"],\
             ["html-webpack-plugin", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:5.5.0"],\
+            ["regenerator-runtime", "npm:0.13.11"],\
             ["v-transform", "npm:2.0.1"],\
             ["webpack", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:5.79.0"],\
             ["webpack-cli", "virtual:046141dab164aa69cf99767d7e7e8adc1c89cb177db89dadd7de3a9b29173c0f2ab7938c3229742e0d2b3f02d11c4719a7aa014daa7129bd22eaa1537fbffed8#npm:4.8.0"],\
@@ -6534,6 +6536,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["regenerator-runtime", [\
+        ["npm:0.13.11", {\
+          "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.13.11-90bf536060-27481628d2.zip/node_modules/regenerator-runtime/",\
+          "packageDependencies": [\
+            ["regenerator-runtime", "npm:0.13.11"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
         ["npm:0.13.9", {\
           "packageLocation": "./.yarn/cache/regenerator-runtime-npm-0.13.9-6d02340eec-65ed455fe5.zip/node_modules/regenerator-runtime/",\
           "packageDependencies": [\
