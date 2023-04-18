@@ -5,6 +5,8 @@ import './ui/promisesLaya.js'
 import './ui/layaUI.max.all.js';
 import UIManager from './ui/uiManager.js';
 import * as utils from './functions/util.js';
+import * as ZhCn from "./i18n/zh-cn.js";
+import * as EnUs from "./i18n/en-us.js";
 
 globalThis.UIManager =
     globalThis.UI =
@@ -137,13 +139,16 @@ class App {
     async #setLanguage(language) {
         switch (language) {
             case App.languages['en-us']:
+                this.#language = language;
+                Laya.Text.langPacks = EnUs.default;
+                break;
             case App.languages['zh-cn']:
                 this.#language = language;
-                Laya.Text.langPacks = import('/src/i18n/zh-cn.js').default;
+                Laya.Text.langPacks = ZhCn.default;
                 break;
             default:
                 this.#language = App.languages['zh-cn'];
-                Laya.Text.langPacks = import('/src/i18n/zh-cn.js').default;
+                Laya.Text.langPacks = ZhCn.default;
                 break;
         }
     }

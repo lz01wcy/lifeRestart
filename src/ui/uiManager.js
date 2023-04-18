@@ -147,7 +147,24 @@ export default class UIManager {
     async loadView(className) {
         // load view
         if (this.#class.has(className)) return this.#class.get(className);
-        const c = (await import(`/src/ui/themes/${className}.js`)).default;
+        // const c = (await import(`/src/ui/themes/${className}.js`)).default;
+        console.log(`loadView(className):${className}`)
+        const array1 = className.split('/')
+        let c;
+        switch (array1.length) {
+            case 1:
+                c = (await import(`./themes/${array1[0]}.js`)).default;
+                break;
+            case 2:
+                c = (await import(`./themes/${array1[0]}/${array1[1]}.js`)).default;
+                break;
+            case 3:
+                c = (await import(`./themes/${array1[0]}/${array1[1]}/${array1[2]}.js`)).default;
+                break;
+            default:
+                alert(`预期外的className:${className}`)
+                break;
+        }
         this.#class.set(className, c);
         return c;
     }
